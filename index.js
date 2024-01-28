@@ -16,22 +16,15 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-// Set up a route for file upload
-app.post('/api/fileanalyse', upload.single('file'), (req, res) => {
-  // Extract file information
-  const file = req.file;
-  const fileName = file.originalname;
-  const fileType = file.mimetype;
-  const fileSize = file.size;
+app.post('/api/fileanalize', upload.any(), function (req, res) {
+  const files = req.files[0];
+  const response = {
+    name: files.originalname,
+    type: files.mimetype,
+    size: files.size
+  }
 
-  // Construct response data
-  const responseData = {
-      name: fileName,
-      type: fileType,
-      size: fileSize
-  };
-
-  res.json(responseData);
+  res.send(response);  
 });
 
 const port = process.env.PORT || 3000;
